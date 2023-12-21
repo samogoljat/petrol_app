@@ -1,0 +1,10 @@
+.userDetails {
+    width: 50%;
+    padding: 10px;
+    border-left: 1px solid #ccc;
+  }
+  
+  .userDetails h2 {
+    margin-bottom: 20px;
+  }
+  

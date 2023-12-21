@@ -1,0 +1,24 @@
+.userList {
+    width: 50%;
+    padding: 10px;
+  }
+  
+  .userList h2 {
+    margin-bottom: 20px;
+  }
+  
+  .userList ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .userList li {
+    cursor: pointer;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .userList li:hover {
+    background-color: #f0f0f0;
+  }
+  
