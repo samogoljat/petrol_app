@@ -1,24 +1,38 @@
 .userList {
-    width: 50%;
-    padding: 10px;
+    width: 40%;
+    padding: 20px;
+    background-color: #f7f7f7;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow-y: auto;
+    max-height: 500px; /* Adjust the height as needed */
   }
   
   .userList h2 {
-    margin-bottom: 20px;
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 15px;
+    text-align: center;
   }
   
   .userList ul {
     list-style-type: none;
+    margin: 0;
     padding: 0;
   }
   
   .userList li {
     cursor: pointer;
     padding: 10px;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.2s;
   }
   
   .userList li:hover {
-    background-color: #f0f0f0;
+    background-color: #ececec;
+  }
+  
+  .userList li:last-child {
+    border-bottom: none;
   }
   

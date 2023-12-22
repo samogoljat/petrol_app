@@ -2,6 +2,7 @@ import React from 'react';
 import styles from '../styles/UserDetails.module.css';
 
 const UserDetails = ({ user }) => {
+  // Component to display the details of the selected user
   return (
     <div className={styles.userDetails}>
       <h2>User Details</h2>
