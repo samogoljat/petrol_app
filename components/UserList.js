@@ -2,11 +2,10 @@ import React, { useEffect, useState } from 'react';
 import styles from '../styles/UserList.module.css';
 
 const UserList = ({ onSelectUser, onAddUser, onDeleteUser }) => {
-  const [users, setUsers] = useState([]); // State for storing the list of users
-  const [newUserName, setNewUserName] = useState(''); // State for the new user's name input
-  const [newUserEmail, setNewUserEmail] = useState(''); // State for the new user's email input
+  const [users, setUsers] = useState([]);
+  const [newUserName, setNewUserName] = useState('');
+  const [newUserEmail, setNewUserEmail] = useState('');
 
-  // Fetching users from the API on component mount
   useEffect(() => {
     fetch('https://reqres.in/api/users')
       .then(response => response.json())
@@ -14,50 +13,65 @@ const UserList = ({ onSelectUser, onAddUser, onDeleteUser }) => {
       .catch(error => console.error('Error fetching data:', error));
   }, []);
 
-  // Function to handle adding a new user
   const handleAddUser = () => {
     const newUser = {
-      id: Date.now(), // Mock ID for the new user
+      id: Date.now(),
       first_name: newUserName.split(' ')[0],
       last_name: newUserName.split(' ')[1] || '',
       email: newUserEmail,
-      avatar: 'https://reqres.in/img/faces/10-image.jpg', // Placeholder image
+      avatar: 'https://reqres.in/img/faces/10-image.jpg',
     };
 
-    setUsers([...users, newUser]); // Updating the users state
-    onAddUser(newUser); // Notifying the parent component
+    setUsers([...users, newUser]);
+    onAddUser(newUser);
+    setNewUserName('');
+    setNewUserEmail('');
   };
 
-  // Function to handle deleting a user
-  const handleDeleteUser = (userId) => {
+  const handleDeleteUser = (userId, event) => {
+    event.stopPropagation();
     const updatedUsers = users.filter(user => user.id !== userId);
-    setUsers(updatedUsers); // Updating the users state
-    onDeleteUser(userId); // Notifying the parent component
+    setUsers(updatedUsers);
+    onDeleteUser(userId);
   };
 
   return (
     <div className={styles.userList}>
       <h2>User List</h2>
-      <div>
+      <div className={styles.formGroup}>
         <input
+          className={styles.inputField}
           type="text"
           placeholder="Name"
           value={newUserName}
           onChange={(e) => setNewUserName(e.target.value)}
         />
         <input
+          className={styles.inputField}
           type="email"
           placeholder="Email"
           value={newUserEmail}
           onChange={(e) => setNewUserEmail(e.target.value)}
         />
-        <button onClick={handleAddUser}>Add User</button>
+        <button
+          className={styles.addButton}
+          onClick={handleAddUser}
+        >
+          Add User
+        </button>
       </div>
       <ul>
         {users.map(user => (
           <li key={user.id} onClick={() => onSelectUser(user)}>
-            {user.first_name} {user.last_name}
-            <button onClick={() => handleDeleteUser(user.id)}>Delete</button>
+            <span className={styles.userName}>
+              {user.first_name} {user.last_name}
+            </span>
+            <button
+              className={styles.deleteButton}
+              onClick={(e) => handleDeleteUser(user.id, e)}
+            >
+              Delete
+            </button>
           </li>
         ))}
       </ul>
