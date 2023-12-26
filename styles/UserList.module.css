@@ -6,7 +6,7 @@
   background-color: #f7f7f7;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  overflow-y: auto;
+  overflow: hidden; /* Hide scrollbars */
   max-height: 500px;
   flex: 1; /* Take up equal width */
   display: flex;

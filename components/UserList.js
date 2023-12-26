@@ -9,22 +9,28 @@ const UserList = ({ onSelectUser, onAddUser, onDeleteUser }) => {
   const [newUserEmail, setNewUserEmail] = useState('');
 
   useEffect(() => {
-    fetch('https://reqres.in/api/users')
-      .then(response => response.json())
-      .then(data => {
-        setUsers(data.data);
-        setFilteredUsers(data.data); // Initialize filtered users with all users
-      })
-      .catch(error => console.error('Error fetching data:', error));
+    // Function to fetch users
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch('https://reqres.in/api/users');
+        const jsonData = await response.json();
+        setUsers(jsonData.data);
+        setFilteredUsers(jsonData.data); // Initialize with all users
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchUsers();
   }, []);
 
   useEffect(() => {
-    // Filter users when the search term changes
+    // Filter users based on the search term
     const lowercasedSearchTerm = searchTerm.toLowerCase();
-    const filtered = users.filter(user => {
-      return `${user.first_name} ${user.last_name}`.toLowerCase().includes(lowercasedSearchTerm) || 
-             user.email.toLowerCase().includes(lowercasedSearchTerm);
-    });
+    const filtered = users.filter(user =>
+      `${user.first_name} ${user.last_name}`.toLowerCase().includes(lowercasedSearchTerm) ||
+      user.email.toLowerCase().includes(lowercasedSearchTerm)
+    );
     setFilteredUsers(filtered);
   }, [searchTerm, users]);
 
@@ -39,7 +45,7 @@ const UserList = ({ onSelectUser, onAddUser, onDeleteUser }) => {
 
     const newUsersList = [...users, newUser];
     setUsers(newUsersList);
-    setFilteredUsers(newUsersList); // Update filtered users
+    setFilteredUsers(newUsersList);
     onAddUser(newUser);
     setNewUserName('');
     setNewUserEmail('');
@@ -49,7 +55,7 @@ const UserList = ({ onSelectUser, onAddUser, onDeleteUser }) => {
     event.stopPropagation();
     const updatedUsers = users.filter(user => user.id !== userId);
     setUsers(updatedUsers);
-    setFilteredUsers(updatedUsers); // Update filtered users
+    setFilteredUsers(updatedUsers);
     onDeleteUser(userId);
   };
 
@@ -61,7 +67,7 @@ const UserList = ({ onSelectUser, onAddUser, onDeleteUser }) => {
         placeholder="Search by name or email"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className={styles.searchInput} // Make sure to define this class in your CSS
+        className={styles.searchInput}
       />
       <div className={styles.formGroup}>
         <input
