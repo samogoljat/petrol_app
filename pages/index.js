@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import UserList from '../components/UserList';
 import UserDetails from '../components/UserDetails';
+import '../styles/globals.css'; // Import your global styles
 
 export default function Home() {
   const [selectedUser, setSelectedUser] = useState(null); // State to track the selected user
@@ -16,7 +17,7 @@ export default function Home() {
   };
 
   return (
-    <div style={{ display: 'flex' }}>
+    <div className="container"> {/* This applies the centering styles */}
       <UserList
         onSelectUser={setSelectedUser}
         onAddUser={handleAddUser}

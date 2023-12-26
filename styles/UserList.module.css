@@ -1,16 +1,21 @@
 .userList {
-  width: 40%;
+  width: 100%;
+  max-width: 600px;
+  margin: 20px;
   padding: 20px;
   background-color: #f7f7f7;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   overflow-y: auto;
   max-height: 500px;
+  flex: 1; /* Take up equal width */
+  display: flex;
+  flex-direction: column;
 }
 
 .userList h2 {
   color: #333;
-  font-size: 24px;
+  font-size: 42px;
   margin-bottom: 15px;
   text-align: center;
 }
@@ -66,7 +71,7 @@
   font-size: 16px;
   color: #333;
   transition: border-color 0.2s ease-in-out;
-  width: 100%; /* You might need to adjust this if you have specific layout requirements */
+  width: 50%; /* You might need to adjust this if you have specific layout requirements */
   box-sizing: border-box; /* This makes sure padding doesn't affect the total width */
 }
 
@@ -100,4 +105,18 @@
 
 .formGroup > *:last-child {
   margin-right: 0;
+}
+
+.searchInput {
+  padding: 8px;
+  margin-bottom: 20px; /* Space below the search bar */
+  width: 100%; /* Full-width search bar */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+@media (min-width: 768px) {
+  .userList {
+    width: 40%; /* Use a fixed percentage for tablet and desktop views */
+  }
 }

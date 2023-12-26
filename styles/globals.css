@@ -1,0 +1,47 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f7f7f7;
+}
+
+#root, #__next { /* Make sure to use the correct ID for your root element */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.container {
+    display: flex;
+    flex-direction: column; /* Children side by side */
+    align-items: stretch; /* This will make children stretch to the same height */
+    justify-content: center; /* Center children horizontally */
+    width: 80vw; /* Adjust as needed */
+    max-width: 1200px; /* Adjust as needed */
+    min-height: 80vh; /* Adjust as needed */
+    margin: auto; /* Center the container on the page */
+    gap: 20px; /* Space between children */
+    padding: 20px; /* Padding inside the container */
+    box-sizing: border-box;
+    background: #fff; /* Assuming you want a white background */
+    border-radius: 10px; /* Optional, for rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional, for shadow effect */
+  }
+
+h2 {
+    font-size: 80px;
+}
+
+@media (min-width: 768px) {
+    .container {
+      flex-direction: row; /* Side-by-side layout for larger screens */
+      justify-content: space-around; /* Space out the children */
+      padding: 40px;
+    }
+  }
