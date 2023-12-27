@@ -1,31 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import useUsers from './useUsers'; // Import the custom hook
 import styles from '../styles/UserList.module.css';
 
 const UserList = ({ onSelectUser, onAddUser, onDeleteUser }) => {
-  const [users, setUsers] = useState([]);
+  const { users, isLoading, error } = useUsers(); // Use the custom hook
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [newUserName, setNewUserName] = useState('');
   const [newUserEmail, setNewUserEmail] = useState('');
 
   useEffect(() => {
-    // Function to fetch users
-    const fetchUsers = async () => {
-      try {
-        const response = await fetch('https://reqres.in/api/users');
-        const jsonData = await response.json();
-        setUsers(jsonData.data);
-        setFilteredUsers(jsonData.data); // Initialize with all users
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchUsers();
-  }, []);
-
-  useEffect(() => {
-    // Filter users based on the search term
     const lowercasedSearchTerm = searchTerm.toLowerCase();
     const filtered = users.filter(user =>
       `${user.first_name} ${user.last_name}`.toLowerCase().includes(lowercasedSearchTerm) ||
@@ -36,17 +20,17 @@ const UserList = ({ onSelectUser, onAddUser, onDeleteUser }) => {
 
   const handleAddUser = () => {
     const newUser = {
-      id: Date.now(),
+      id: Date.now(), // Assuming id is a timestamp for simplicity
       first_name: newUserName.split(' ')[0],
       last_name: newUserName.split(' ')[1] || '',
       email: newUserEmail,
-      avatar: 'https://reqres.in/img/faces/10-image.jpg',
+      avatar: 'https://reqres.in/img/faces/10-image.jpg', // Placeholder avatar
     };
 
     const newUsersList = [...users, newUser];
     setUsers(newUsersList);
     setFilteredUsers(newUsersList);
-    onAddUser(newUser);
+    onAddUser(newUser); // Call the provided onAddUser function
     setNewUserName('');
     setNewUserEmail('');
   };
@@ -56,7 +40,24 @@ const UserList = ({ onSelectUser, onAddUser, onDeleteUser }) => {
     const updatedUsers = users.filter(user => user.id !== userId);
     setUsers(updatedUsers);
     setFilteredUsers(updatedUsers);
-    onDeleteUser(userId);
+    onDeleteUser(userId); // Call the provided onDeleteUser function
+  };
+
+  const renderUsers = () => {
+    if (isLoading) {
+      return <p>Loading...</p>; // Replace with your skeleton loader component
+    }
+
+    if (error) {
+      return <p>Error: {error}</p>; // Replace with your styled error notification component
+    }
+
+    return filteredUsers.map(user => (
+      <li key={user.id} onClick={() => onSelectUser(user)}>
+        <span>{user.first_name} {user.last_name}</span>
+        <button onClick={(e) => handleDeleteUser(user.id, e)}>Delete</button>
+      </li>
+    ));
   };
 
   return (
@@ -92,19 +93,7 @@ const UserList = ({ onSelectUser, onAddUser, onDeleteUser }) => {
         </button>
       </div>
       <ul>
-        {filteredUsers.map(user => (
-          <li key={user.id} onClick={() => onSelectUser(user)}>
-            <span className={styles.userName}>
-              {user.first_name} {user.last_name}
-            </span>
-            <button
-              className={styles.deleteButton}
-              onClick={(e) => handleDeleteUser(user.id, e)}
-            >
-              Delete
-            </button>
-          </li>
-        ))}
+        {renderUsers()}
       </ul>
     </div>
   );
