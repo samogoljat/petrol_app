@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import useUsers from './useUsers'; // Import the custom hook
 import styles from '../styles/UserList.module.css';
+import '../styles/loadingSpinnerStyles.css'
 
 const UserList = ({ onSelectUser, onAddUser, onDeleteUser }) => {
   const { users, isLoading, error } = useUsers(); // Use the custom hook
@@ -45,17 +46,19 @@ const UserList = ({ onSelectUser, onAddUser, onDeleteUser }) => {
 
   const renderUsers = () => {
     if (isLoading) {
-      return <p>Loading...</p>; // Replace with your skeleton loader component
+      return (
+        <div className="loading-spinner"></div>
+      );
     }
-
+  
     if (error) {
-      return <p>Error: {error}</p>; // Replace with your styled error notification component
+      return <p>Error: {error}</p>;
     }
-
-    return filteredUsers.map(user => (
+  
+    return filteredUsers.map((user) => (
       <li key={user.id} onClick={() => onSelectUser(user)}>
         <span>{user.first_name} {user.last_name}</span>
-        <button onClick={(e) => handleDeleteUser(user.id, e)}>Delete</button>
+        <button className={styles.deleteButton} onClick={(e) => handleDeleteUser(user.id, e)}>Delete</button>
       </li>
     ));
   };
