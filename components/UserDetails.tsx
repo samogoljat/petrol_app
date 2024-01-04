@@ -1,7 +1,20 @@
 import React from 'react';
 import styles from '../styles/UserDetails.module.css';
 
-const UserDetails = ({ user }) => {
+// Define the type for the user prop
+interface User {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  avatar: string;
+}
+
+interface UserDetailsProps {
+  user: User;
+}
+
+const UserDetails: React.FC<UserDetailsProps> = ({ user }) => {
   // Component to display the details of the selected user
   return (
     <div className={styles.userDetails}>

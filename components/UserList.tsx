@@ -1,16 +1,26 @@
-// components/UserList.js
-
 import React, { useState, useEffect } from 'react';
-import useUsers from './useUsers'; // Import the custom hook
+import useUsers from './useUsers'; // Assuming this will also be a TypeScript file
 import styles from '../styles/UserList.module.css';
 import '../styles/loadingSpinnerStyles.css';
 
-const UserList = ({ onSelectUser }) => {
-  const { users, isLoading, error, addUser, deleteUser } = useUsers(); // Use the custom hook
-  const [filteredUsers, setFilteredUsers] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [newUserName, setNewUserName] = useState('');
-  const [newUserEmail, setNewUserEmail] = useState('');
+interface User {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  avatar: string;
+}
+
+interface UserListProps {
+  onSelectUser: (user: User) => void;
+}
+
+const UserList: React.FC<UserListProps> = ({ onSelectUser }) => {
+  const { users, isLoading, error, addUser, deleteUser } = useUsers();
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [newUserName, setNewUserName] = useState<string>('');
+  const [newUserEmail, setNewUserEmail] = useState<string>('');
 
   useEffect(() => {
     const lowercasedSearchTerm = searchTerm.toLowerCase();
@@ -21,39 +31,43 @@ const UserList = ({ onSelectUser }) => {
     setFilteredUsers(filtered);
   }, [searchTerm, users]);
 
-  const handleAddUser = () => {
-    const newUser = {
-      id: Date.now(), // Assuming id is a timestamp for simplicity
+  const handleAddUser = (): void => {
+    const newUser: User = {
+      id: Date.now(),
       first_name: newUserName.split(' ')[0],
       last_name: newUserName.split(' ')[1] || '',
       email: newUserEmail,
-      avatar: 'https://reqres.in/img/faces/10-image.jpg', // Placeholder avatar
+      avatar: 'https://reqres.in/img/faces/10-image.jpg',
     };
-    addUser(newUser); // Use the addUser function from useUsers hook
+    addUser(newUser);
     setNewUserName('');
     setNewUserEmail('');
   };
 
-  const handleDeleteUser = (userId, event) => {
+  const handleDeleteUser = (userId: number, event: React.MouseEvent<HTMLButtonElement>): void => {
     event.stopPropagation();
-    deleteUser(userId); // Use the deleteUser function from useUsers hook
+    deleteUser(userId);
   };
 
-  const renderUsers = () => {
+  const renderUsers = (): JSX.Element => {
     if (isLoading) {
       return <div className="loading-spinner"></div>;
     }
-  
+
     if (error) {
       return <p>Error: {error}</p>;
     }
-  
-    return filteredUsers.map((user) => (
-      <li key={user.id} onClick={() => onSelectUser(user)}>
-        <span>{user.first_name} {user.last_name}</span>
-        <button className={styles.deleteButton} onClick={(e) => handleDeleteUser(user.id, e)}>Delete</button>
-      </li>
-    ));
+
+    return (
+      <ul>
+        {filteredUsers.map((user) => (
+          <li key={user.id} onClick={() => onSelectUser(user)}>
+            <span>{user.first_name} {user.last_name}</span>
+            <button className={styles.deleteButton} onClick={(e) => handleDeleteUser(user.id, e)}>Delete</button>
+          </li>
+        ))}
+      </ul>
+    );
   };
 
   return (

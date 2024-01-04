@@ -1,18 +1,25 @@
-// useUsers.js
 import { useState, useEffect } from 'react';
-import { fetchUsers } from './userService'; // Importing the service function
+import { fetchUsers } from './userService'; // Assuming this will also be converted to TypeScript
+
+interface User {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  avatar: string;
+}
 
 const useUsers = () => {
-  const [users, setUsers] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [users, setUsers] = useState<User[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const getUsers = async () => {
       setIsLoading(true);
       setError(null);
       try {
-        const fetchedUsers = await fetchUsers();
+        const fetchedUsers: User[] = await fetchUsers();
         setUsers(fetchedUsers);
       } catch (error) {
         setError('Failed to fetch users');
@@ -25,11 +32,11 @@ const useUsers = () => {
     getUsers();
   }, []);
 
-  const addUser = (newUser) => {
+  const addUser = (newUser: User) => {
     setUsers(prevUsers => [...prevUsers, newUser]);
   };
 
-  const deleteUser = (userId) => {
+  const deleteUser = (userId: number) => {
     setUsers(prevUsers => prevUsers.filter(user => user.id !== userId));
   };
 
