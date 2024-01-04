@@ -25,7 +25,15 @@ const useUsers = () => {
     getUsers();
   }, []);
 
-  return { users, isLoading, error };
+  const addUser = (newUser) => {
+    setUsers(prevUsers => [...prevUsers, newUser]);
+  };
+
+  const deleteUser = (userId) => {
+    setUsers(prevUsers => prevUsers.filter(user => user.id !== userId));
+  };
+
+  return { users, isLoading, error, addUser, deleteUser };
 };
 
 export default useUsers;

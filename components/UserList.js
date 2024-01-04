@@ -1,10 +1,12 @@
+// components/UserList.js
+
 import React, { useState, useEffect } from 'react';
 import useUsers from './useUsers'; // Import the custom hook
 import styles from '../styles/UserList.module.css';
-import '../styles/loadingSpinnerStyles.css'
+import '../styles/loadingSpinnerStyles.css';
 
-const UserList = ({ onSelectUser, onAddUser, onDeleteUser }) => {
-  const { users, isLoading, error } = useUsers(); // Use the custom hook
+const UserList = ({ onSelectUser }) => {
+  const { users, isLoading, error, addUser, deleteUser } = useUsers(); // Use the custom hook
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [newUserName, setNewUserName] = useState('');
@@ -27,28 +29,19 @@ const UserList = ({ onSelectUser, onAddUser, onDeleteUser }) => {
       email: newUserEmail,
       avatar: 'https://reqres.in/img/faces/10-image.jpg', // Placeholder avatar
     };
-
-    const newUsersList = [...users, newUser];
-    setUsers(newUsersList);
-    setFilteredUsers(newUsersList);
-    onAddUser(newUser); // Call the provided onAddUser function
+    addUser(newUser); // Use the addUser function from useUsers hook
     setNewUserName('');
     setNewUserEmail('');
   };
 
   const handleDeleteUser = (userId, event) => {
     event.stopPropagation();
-    const updatedUsers = users.filter(user => user.id !== userId);
-    setUsers(updatedUsers);
-    setFilteredUsers(updatedUsers);
-    onDeleteUser(userId); // Call the provided onDeleteUser function
+    deleteUser(userId); // Use the deleteUser function from useUsers hook
   };
 
   const renderUsers = () => {
     if (isLoading) {
-      return (
-        <div className="loading-spinner"></div>
-      );
+      return <div className="loading-spinner"></div>;
     }
   
     if (error) {
